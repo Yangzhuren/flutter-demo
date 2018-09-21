@@ -5,7 +5,7 @@ class NewsList extends StatelessWidget {
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: new AppBar(
-          title: new Text('新闻列表'),
+          title: new Text('公告'),
           centerTitle: true,
         ),
         body: new Center(

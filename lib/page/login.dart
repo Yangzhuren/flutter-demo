@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_djt/api.dart';
+import 'package:flutter_djt/util/http.dart';
 import 'dart:ui';
+
+import 'package:flutter_djt/util/text.dart';
+import 'package:flutter_djt/util/ui.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -11,6 +16,31 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   String _account;
   String _password;
+
+  void _login(BuildContext context) {
+    if (TextUtil.isEmpty(_account)) {
+      AlertUtil.showToast('请输入用户名');
+      return;
+    }
+    if (TextUtil.isEmpty(_password)) {
+      AlertUtil.showToast('请输入密码');
+      return;
+    }
+    // map 必须设置泛型，不然post请求会报错，可能是网络请求框架的坑
+    Map<String, String> params = {
+      'userName': _account,
+      'password': _password,
+      'pampasCall': Api.apiLogin,
+    };
+    HttpUtil.post(params, (data) {
+      AlertUtil.showToast('动检通欢迎您');
+      HttpUtil.sessionId = data['sessionId'];
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil('farmHome', (route) => route == null);
+    }, (error) {
+      AlertUtil.showToast(error);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,8 +99,7 @@ class _LoginState extends State<Login> {
               height: 45.0,
               child: new RaisedButton(
                 onPressed: () {
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                      'farmHome', (route) => route == null);
+                  _login(context);
                 },
                 color: Theme.of(context).primaryColor,
                 child: new Text(

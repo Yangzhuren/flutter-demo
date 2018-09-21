@@ -3,6 +3,8 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_djt/page/welcome.dart';
 import 'package:flutter_djt/page/login.dart';
 import 'package:flutter_djt/page/home/farm/farmHome.dart';
+import 'package:flutter_djt/util/http.dart';
+import 'api.dart';
 
 void main() {
 //  debugPaintSizeEnabled = true;
@@ -10,8 +12,14 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  // 初始化
+  void _init() {
+    HttpUtil.init(Api.baseUrl, Api.isDebug);
+  }
+
   @override
   Widget build(BuildContext context) {
+    _init();
     return new MaterialApp(
       title: '动检通',
       theme: new ThemeData(
